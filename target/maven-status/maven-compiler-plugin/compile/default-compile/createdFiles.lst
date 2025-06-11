@@ -1,0 +1,15 @@
+com\mycompany\proyecto_academico\modelo\Especialidad.class
+com\mycompany\proyecto_academico\vistaEvaluador\EvaluadorForm.class
+com\mycompany\proyecto_academico\modelo\ClaveCompuesta.class
+com\mycompany\proyecto_academico\modelo\Evaluador.class
+com\mycompany\proyecto_academico\vistaEvaluador\EvaluadorForm$4.class
+com\mycompany\proyecto_academico\vistaEvaluador\EvaluadorModificacion.class
+com\mycompany\proyecto_academico\vistaEvaluador\EvaluadorForm$2.class
+com\mycompany\proyecto_academico\Proyecto_academico.class
+com\mycompany\proyecto_academico\vistaEvaluador\EvaluadorForm$3.class
+com\mycompany\proyecto_academico\modelo\Evaluador_tiene_especialidad.class
+com\mycompany\proyecto_academico\DAO\EvaluadorDAO.class
+com\mycompany\proyecto_academico\vistaEvaluador\EvaluadorForm$1.class
+com\mycompany\proyecto_academico\vistaEvaluador\EvaluadorModificacion$1.class
+com\mycompany\proyecto_academico\DAO\EspecialidadDAO.class
+com\mycompany\proyecto_academico\DAO\EvaluadorTieneEspecialidadDAO.class
