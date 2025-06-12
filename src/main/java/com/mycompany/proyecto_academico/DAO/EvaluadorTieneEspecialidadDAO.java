@@ -16,9 +16,14 @@ public class EvaluadorTieneEspecialidadDAO {
     public void agregarRelacion(Evaluador evaluador, Especialidad especialidad) {
         EntityManager em = emf.createEntityManager();
         em.getTransaction().begin();
+        
+         // Reasociar las entidades al contexto actual
+        Evaluador evaluadorGestionado = em.find(Evaluador.class, evaluador.getId_evaluador());
+        Especialidad especialidadGestionada = em.find(Especialidad.class, especialidad.getId_especialidad());
 
-        ClaveCompuesta clave = new ClaveCompuesta(evaluador.getId_evaluador(), especialidad.getId_especialidad());
-        Evaluador_tiene_especialidad relacion = new Evaluador_tiene_especialidad(clave, evaluador, especialidad);
+        
+        ClaveCompuesta clave = new ClaveCompuesta(evaluadorGestionado.getId_evaluador(), especialidadGestionada.getId_especialidad());
+        Evaluador_tiene_especialidad relacion = new Evaluador_tiene_especialidad(clave, evaluadorGestionado, especialidadGestionada);
 
         em.persist(relacion);
 
@@ -52,6 +57,20 @@ public class EvaluadorTieneEspecialidadDAO {
         em.close();
         return lista;
     }
+    
+    public void eliminarPorEvaluador(int idEvaluador) {
+        EntityManager em = emf.createEntityManager();
+        try {
+            em.getTransaction().begin();
+            em.createQuery("DELETE FROM Evaluador_tiene_especialidad e WHERE e.evaluador.id_evaluador = :id")
+              .setParameter("id", idEvaluador)
+              .executeUpdate();
+            em.getTransaction().commit();
+        } finally {
+            if (em.isOpen()) em.close();
+        }
+    }
+
 
 }
 

@@ -70,7 +70,7 @@ public class Especialidad {
 
     @Override
     public String toString() {
-        return "Especialidad{" + "id_especialidad=" + id_especialidad + ", nombre=" + nombre + ", descripcion=" + descripcion + '}';
+        return this.nombre;
     }
     
     

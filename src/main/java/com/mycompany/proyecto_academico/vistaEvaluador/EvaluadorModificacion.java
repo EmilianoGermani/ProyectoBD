@@ -4,6 +4,17 @@
  */
 package com.mycompany.proyecto_academico.vistaEvaluador;
 
+import com.mycompany.proyecto_academico.DAO.EspecialidadDAO;
+import com.mycompany.proyecto_academico.DAO.EvaluadorDAO;
+import com.mycompany.proyecto_academico.DAO.EvaluadorTieneEspecialidadDAO;
+import com.mycompany.proyecto_academico.modelo.Especialidad;
+import com.mycompany.proyecto_academico.modelo.Evaluador;
+import com.mycompany.proyecto_academico.modelo.Evaluador_tiene_especialidad;
+import java.util.List;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author emi_g
@@ -13,8 +24,30 @@ public class EvaluadorModificacion extends javax.swing.JFrame {
     /**
      * Creates new form EvaluadorModificacion
      */
+    private EntityManagerFactory emf;
+    private EvaluadorDAO evaluadorDAO;
+    private EspecialidadDAO especialidadDAO;
+    private EvaluadorTieneEspecialidadDAO relacionDAO;
+    private Evaluador evaluadorActual; // Almacena el evaluador encontrado
     public EvaluadorModificacion() {
         initComponents();
+        emf = Persistence.createEntityManagerFactory("Persistencia"); // Usa el nombre exacto del persistence.xml
+        especialidadDAO = new EspecialidadDAO(emf);
+
+        evaluadorDAO = new EvaluadorDAO();
+        especialidadDAO = new EspecialidadDAO(emf);
+        relacionDAO = new EvaluadorTieneEspecialidadDAO(emf);
+        // Obtener especialidades desde la BD
+        List<Especialidad> especList = especialidadDAO.obtenerTodas();
+
+        // Limpiar el combo (por si acaso)
+        comboEspecialidad.removeAllItems();
+
+        // Agregar todas las especialidades al combo
+        for (Especialidad e : especList) {
+            comboEspecialidad.addItem(e); // Solo mostramos el nombre
+        }
+        
     }
 
     /**
@@ -26,21 +59,217 @@ public class EvaluadorModificacion extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jLabel1 = new javax.swing.JLabel();
+        busquedaID = new javax.swing.JTextField();
+        BotonBuscar = new javax.swing.JButton();
+        TextFieldNombre = new javax.swing.JTextField();
+        TextFieldApellido = new javax.swing.JTextField();
+        TextFieldEmail = new javax.swing.JTextField();
+        TextFieldTelefono = new javax.swing.JTextField();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        BotonModificar = new javax.swing.JButton();
+        BotonCancelar = new javax.swing.JButton();
+        comboEspecialidad = new javax.swing.JComboBox<>();
+        jLabel6 = new javax.swing.JLabel();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jLabel1.setText("ID");
+
+        BotonBuscar.setText("Buscar");
+        BotonBuscar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                BotonBuscarMouseClicked(evt);
+            }
+        });
+
+        TextFieldEmail.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                TextFieldEmailActionPerformed(evt);
+            }
+        });
+
+        jLabel2.setText("Nombre");
+
+        jLabel3.setText("Apellido");
+
+        jLabel4.setText("Email");
+
+        jLabel5.setText("Telefono");
+
+        BotonModificar.setText("Modificar");
+        BotonModificar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                BotonModificarMouseClicked(evt);
+            }
+        });
+
+        BotonCancelar.setText("Cancelar");
+        BotonCancelar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                BotonCancelarMouseClicked(evt);
+            }
+        });
+
+        jLabel6.setText("Especialidad");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(47, 47, 47)
+                .addComponent(BotonModificar)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(BotonCancelar)
+                .addGap(42, 42, 42))
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(39, 39, 39)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(busquedaID, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(45, 45, 45)
+                        .addComponent(BotonBuscar))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(22, 22, 22)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel5))
+                                .addGap(27, 27, 27))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, 69, Short.MAX_VALUE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(TextFieldTelefono, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(TextFieldEmail, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(TextFieldApellido, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(TextFieldNombre)
+                            .addComponent(comboEspecialidad, 0, 236, Short.MAX_VALUE))))
+                .addContainerGap(50, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(29, 29, 29)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(busquedaID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(BotonBuscar))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(TextFieldNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(TextFieldApellido, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel3))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(TextFieldEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel4))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(TextFieldTelefono, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel5))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(comboEspecialidad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel6))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 33, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(BotonModificar)
+                    .addComponent(BotonCancelar))
+                .addGap(16, 16, 16))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void TextFieldEmailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TextFieldEmailActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_TextFieldEmailActionPerformed
+
+    private void BotonBuscarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BotonBuscarMouseClicked
+        // TODO add your handling code here:
+        try {
+            int id = Integer.parseInt(busquedaID.getText());
+            Evaluador evaluador = evaluadorDAO.buscar(id);
+            evaluadorActual = evaluador;
+
+
+            if (evaluador != null) {
+                TextFieldNombre.setText(evaluador.getNombre());
+                TextFieldApellido.setText(evaluador.getApellido());
+                TextFieldEmail.setText(evaluador.getEmail());
+                TextFieldTelefono.setText(evaluador.getTelefono());
+
+                // Obtener la especialidad asociada
+                EvaluadorTieneEspecialidadDAO dao = new EvaluadorTieneEspecialidadDAO(emf);
+                List<Evaluador_tiene_especialidad> relaciones = dao.listarEspecialidadesDeEvaluador(id);
+                if (!relaciones.isEmpty()) {
+                    Especialidad especialidad = relaciones.get(0).getEspecialidad(); // Solo una
+                    comboEspecialidad.setSelectedItem(especialidad);
+                } else {
+                    comboEspecialidad.setSelectedIndex(-1); // Ninguna seleccionada
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, "Evaluador no encontrado.");
+            }
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this, "Ingrese un ID válido.");
+        }
+    }//GEN-LAST:event_BotonBuscarMouseClicked
+
+    private void BotonModificarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BotonModificarMouseClicked
+        // TODO add your handling code here:
+        try {
+            if (evaluadorActual == null) {
+                JOptionPane.showMessageDialog(this, "Debe buscar un evaluador primero.");
+                return;
+            }
+
+            // Actualizamos los datos del evaluador
+            evaluadorActual.setNombre(TextFieldNombre.getText());
+            evaluadorActual.setApellido(TextFieldApellido.getText());
+            evaluadorActual.setEmail(TextFieldEmail.getText());
+            evaluadorActual.setTelefono(TextFieldTelefono.getText());
+
+            evaluadorDAO.modificar(evaluadorActual); // Método que ya debería existir en tu DAO
+
+            // Actualizar especialidad
+            Especialidad especialidadSeleccionada = (Especialidad) comboEspecialidad.getSelectedItem();
+
+            if (especialidadSeleccionada != null) {
+                // Primero eliminamos todas las relaciones previas
+                relacionDAO.eliminarPorEvaluador(evaluadorActual.getId_evaluador());
+
+                // Creamos una nueva relación
+                relacionDAO.agregarRelacion(evaluadorActual, especialidadSeleccionada);
+
+            }
+
+            JOptionPane.showMessageDialog(this, "Evaluador modificado correctamente.");
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error al modificar evaluador: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }//GEN-LAST:event_BotonModificarMouseClicked
+
+    private void BotonCancelarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BotonCancelarMouseClicked
+        // TODO add your handling code here:
+        dispose();
+    }//GEN-LAST:event_BotonCancelarMouseClicked
 
     /**
      * @param args the command line arguments
@@ -78,5 +307,20 @@ public class EvaluadorModificacion extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton BotonBuscar;
+    private javax.swing.JButton BotonCancelar;
+    private javax.swing.JButton BotonModificar;
+    private javax.swing.JTextField TextFieldApellido;
+    private javax.swing.JTextField TextFieldEmail;
+    private javax.swing.JTextField TextFieldNombre;
+    private javax.swing.JTextField TextFieldTelefono;
+    private javax.swing.JTextField busquedaID;
+    private javax.swing.JComboBox<Especialidad> comboEspecialidad;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     // End of variables declaration//GEN-END:variables
 }

@@ -12,13 +12,18 @@ public class EvaluadorDAO {
 private static EntityManagerFactory emf = Persistence.createEntityManagerFactory("Persistencia");;
 
 
-    public void agregar(Evaluador evaluador) {
+    public Evaluador agregar(Evaluador evaluador) {
         EntityManager em = emf.createEntityManager();
-        em.getTransaction().begin();
-        em.persist(evaluador);
-        em.getTransaction().commit();
-        em.close();
+        try {
+            em.getTransaction().begin();
+            em.persist(evaluador); // Hibernate asigna el ID aquí
+            em.getTransaction().commit();
+            return evaluador; // El evaluador ahora tiene su ID asignado
+        } finally {
+            em.close();
+        }
     }
+
 
     public void modificar(Evaluador evaluador) {
         EntityManager em = emf.createEntityManager();

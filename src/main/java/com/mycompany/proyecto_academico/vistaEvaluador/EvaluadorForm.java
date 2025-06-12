@@ -6,6 +6,7 @@ package com.mycompany.proyecto_academico.vistaEvaluador;
 
 import com.mycompany.proyecto_academico.DAO.EspecialidadDAO;
 import com.mycompany.proyecto_academico.DAO.EvaluadorDAO;
+import com.mycompany.proyecto_academico.DAO.EvaluadorTieneEspecialidadDAO;
 import com.mycompany.proyecto_academico.modelo.Especialidad;
 import com.mycompany.proyecto_academico.modelo.Evaluador;
 import java.util.List;
@@ -35,7 +36,7 @@ private EvaluadorDAO evaluadorDAO;
 
         // Agregar todas las especialidades al combo
         for (Especialidad e : especList) {
-            comboEspecialidad.addItem(e.getNombre()); // Solo mostramos el nombre
+            comboEspecialidad.addItem(e); // Solo mostramos el nombre
         }
 
         evaluadorDAO = new EvaluadorDAO();
@@ -95,8 +96,6 @@ private EvaluadorDAO evaluadorDAO;
         });
 
         jLabel1.setText("Agregar un Evaluador");
-
-        comboEspecialidad.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         jLabel6.setText("Especialidad");
 
@@ -177,16 +176,27 @@ private EvaluadorDAO evaluadorDAO;
 
     private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
         // TODO add your handling code here:
+        
         String nombre = jTextField2.getText();
         String apellido = jTextField3.getText();
         String email = jTextField4.getText();
         String telefono = jTextField5.getText();
-
+        Especialidad especialidadSeleccionada = (Especialidad) comboEspecialidad.getSelectedItem();
+        if (nombre.isEmpty() || apellido.isEmpty() || email.isEmpty() || telefono.isEmpty()) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Todos los campos son obligatorios.");
+            return;
+        }
         Evaluador evaluador = new Evaluador(nombre, apellido, email, telefono);
 
         try {
             evaluadorDAO.agregar(evaluador);
-            javax.swing.JOptionPane.showMessageDialog(this, "Evaluador agregado correctamente.");
+            javax.swing.JOptionPane.showMessageDialog(this, "Evaluador agregado con ID: " + evaluador.getId_evaluador());
+            // Crear relación con especialidad
+            EvaluadorTieneEspecialidadDAO relacionDAO = new EvaluadorTieneEspecialidadDAO(emf);
+            relacionDAO.agregarRelacion(evaluador, especialidadSeleccionada);
+
+            javax.swing.JOptionPane.showMessageDialog(this, "Evaluador y su especialidad fueron agregados correctamente.");
+            dispose(); // Opcional: cerrar ventana tras éxito
         } catch (Exception e) {
             javax.swing.JOptionPane.showMessageDialog(this, "Error al agregar evaluador: " + e.getMessage());
         }
@@ -234,7 +244,7 @@ private EvaluadorDAO evaluadorDAO;
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JComboBox<String> comboEspecialidad;
+    private javax.swing.JComboBox<Especialidad> comboEspecialidad;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
