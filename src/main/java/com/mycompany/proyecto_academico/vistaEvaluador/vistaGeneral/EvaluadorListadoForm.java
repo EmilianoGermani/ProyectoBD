@@ -8,6 +8,10 @@ import com.mycompany.proyecto_academico.DAO.EvaluadorDAO;
 import com.mycompany.proyecto_academico.DAO.EvaluadorTieneEspecialidadDAO;
 import com.mycompany.proyecto_academico.modelo.Evaluador;
 import com.mycompany.proyecto_academico.modelo.Evaluador_tiene_especialidad;
+import com.mycompany.proyecto_academico.vistaEvaluador.EvaluadorBaja;
+import com.mycompany.proyecto_academico.vistaEvaluador.EvaluadorForm;
+import com.mycompany.proyecto_academico.vistaEvaluador.EvaluadorInfo;
+import com.mycompany.proyecto_academico.vistaEvaluador.EvaluadorModificacion;
 import java.util.List;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -30,6 +34,23 @@ public class EvaluadorListadoForm extends javax.swing.JFrame {
         emf = Persistence.createEntityManagerFactory("Persistencia");
         evaluadorDAO = new EvaluadorDAO();
         relacionDAO = new EvaluadorTieneEspecialidadDAO(emf);
+        DefaultTableModel modelo = (DefaultTableModel) jTable1.getModel();
+        modelo.setRowCount(0); // Borra todas las filas
+
+        List<Evaluador> listaEvaluadores = evaluadorDAO.listarTodos();
+
+        for (Evaluador eval : listaEvaluadores) {
+            int id = eval.getId_evaluador();
+            String nombre = eval.getNombre();
+            String apellido = eval.getApellido();
+
+            // Buscar especialidad
+            Evaluador_tiene_especialidad ete = relacionDAO.buscarEspecialidadEvaluador(id);
+            String nombreEspecialidad = ete.getEspecialidad().getNombre();
+
+            // Agregar fila a la tabla
+            modelo.addRow(new Object[]{id, nombre, apellido, nombreEspecialidad});
+        }
     }
 
     /**
@@ -45,6 +66,10 @@ public class EvaluadorListadoForm extends javax.swing.JFrame {
         jTable1 = new javax.swing.JTable();
         BotonActualizar = new javax.swing.JButton();
         BotonCerrar = new javax.swing.JButton();
+        BotonAgregar = new javax.swing.JButton();
+        BotonModificacion = new javax.swing.JButton();
+        BotonEliminar = new javax.swing.JButton();
+        BotonBuscar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -85,32 +110,78 @@ public class EvaluadorListadoForm extends javax.swing.JFrame {
             }
         });
 
+        BotonAgregar.setText("Agregar");
+        BotonAgregar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                BotonAgregarMouseClicked(evt);
+            }
+        });
+
+        BotonModificacion.setText("Modificar");
+        BotonModificacion.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                BotonModificacionMouseClicked(evt);
+            }
+        });
+
+        BotonEliminar.setText("Eliminar");
+        BotonEliminar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                BotonEliminarMouseClicked(evt);
+            }
+        });
+
+        BotonBuscar.setText("Buscar");
+        BotonBuscar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                BotonBuscarMouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(BotonCerrar, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(BotonActualizar, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(33, 33, 33))
             .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(BotonAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(94, 94, 94)
+                        .addComponent(BotonModificacion, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 118, Short.MAX_VALUE)
+                        .addComponent(BotonEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(77, 77, 77)
+                        .addComponent(BotonBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(23, 23, 23))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(9, 9, 9)
-                        .addComponent(BotonActualizar, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(386, 386, 386)
-                        .addComponent(BotonCerrar))
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 574, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(14, Short.MAX_VALUE))
+                        .addComponent(jScrollPane1)
+                        .addContainerGap())))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(BotonActualizar)
-                    .addComponent(BotonCerrar))
+                .addComponent(BotonActualizar)
                 .addGap(16, 16, 16)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 242, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(84, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 24, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(BotonBuscar)
+                    .addComponent(BotonEliminar)
+                    .addComponent(BotonModificacion)
+                    .addComponent(BotonAgregar))
+                .addGap(35, 35, 35)
+                .addComponent(BotonCerrar)
+                .addContainerGap())
         );
 
         pack();
@@ -136,8 +207,6 @@ public class EvaluadorListadoForm extends javax.swing.JFrame {
             int id = eval.getId_evaluador();
             String nombre = eval.getNombre();
             String apellido = eval.getApellido();
-            String email = eval.getEmail();
-            String telefono = eval.getTelefono();
 
             // Buscar especialidad
             Evaluador_tiene_especialidad ete = relacionDAO.buscarEspecialidadEvaluador(id);
@@ -152,6 +221,30 @@ public class EvaluadorListadoForm extends javax.swing.JFrame {
         // TODO add your handling code here:
         dispose();
     }//GEN-LAST:event_BotonCerrarMouseClicked
+
+    private void BotonAgregarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BotonAgregarMouseClicked
+        // TODO add your handling code here:
+        EvaluadorForm altaForm = new EvaluadorForm();
+        altaForm.setVisible(true);
+    }//GEN-LAST:event_BotonAgregarMouseClicked
+
+    private void BotonModificacionMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BotonModificacionMouseClicked
+        // TODO add your handling code here:
+        EvaluadorModificacion modificacionForm = new EvaluadorModificacion();
+        modificacionForm.setVisible(true);
+    }//GEN-LAST:event_BotonModificacionMouseClicked
+
+    private void BotonEliminarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BotonEliminarMouseClicked
+        // TODO add your handling code here:
+        EvaluadorBaja eliminarForm = new EvaluadorBaja();
+        eliminarForm.setVisible(true);
+    }//GEN-LAST:event_BotonEliminarMouseClicked
+
+    private void BotonBuscarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BotonBuscarMouseClicked
+        // TODO add your handling code here:
+        EvaluadorInfo buscarForm = new EvaluadorInfo();
+        buscarForm.setVisible(true);
+    }//GEN-LAST:event_BotonBuscarMouseClicked
 
     /**
      * @param args the command line arguments
@@ -190,7 +283,11 @@ public class EvaluadorListadoForm extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BotonActualizar;
+    private javax.swing.JButton BotonAgregar;
+    private javax.swing.JButton BotonBuscar;
     private javax.swing.JButton BotonCerrar;
+    private javax.swing.JButton BotonEliminar;
+    private javax.swing.JButton BotonModificacion;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
     // End of variables declaration//GEN-END:variables

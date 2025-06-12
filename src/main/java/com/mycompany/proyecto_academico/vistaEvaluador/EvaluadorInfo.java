@@ -4,7 +4,6 @@
  */
 package com.mycompany.proyecto_academico.vistaEvaluador;
 
-import com.mycompany.proyecto_academico.DAO.EspecialidadDAO;
 import com.mycompany.proyecto_academico.DAO.EvaluadorDAO;
 import com.mycompany.proyecto_academico.DAO.EvaluadorTieneEspecialidadDAO;
 import com.mycompany.proyecto_academico.modelo.Evaluador;
@@ -17,15 +16,15 @@ import javax.swing.JOptionPane;
  *
  * @author emi_g
  */
-public class EvaluadorBaja extends javax.swing.JFrame {
+public class EvaluadorInfo extends javax.swing.JFrame {
 
     /**
-     * Creates new form EvaluadorBaja
+     * Creates new form EvaluadorInfo
      */
     private EntityManagerFactory emf;
     private EvaluadorDAO evaluadorDAO;
     private EvaluadorTieneEspecialidadDAO relacionDAO;
-    public EvaluadorBaja() {
+    public EvaluadorInfo() {
         initComponents();
         TextFieldNombre.setEditable(false);
         TextFieldApellido.setEditable(false);
@@ -47,20 +46,19 @@ public class EvaluadorBaja extends javax.swing.JFrame {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
-        TextFieldBuscarID = new javax.swing.JTextField();
+        BuscarID = new javax.swing.JTextField();
         BotonBuscar = new javax.swing.JButton();
         TextFieldNombre = new javax.swing.JTextField();
         TextFieldApellido = new javax.swing.JTextField();
         TextFieldEmail = new javax.swing.JTextField();
         TextFieldTelefono = new javax.swing.JTextField();
+        TextFieldEspecialidad = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        BotonEliminar = new javax.swing.JButton();
-        BotonCancelar = new javax.swing.JButton();
-        TextFieldEspecialidad = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
+        BotonCerrar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -87,72 +85,61 @@ public class EvaluadorBaja extends javax.swing.JFrame {
 
         jLabel5.setText("Telefono");
 
-        BotonEliminar.setText("Eliminar");
-        BotonEliminar.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                BotonEliminarMouseClicked(evt);
-            }
-        });
-
-        BotonCancelar.setText("Cancelar");
-        BotonCancelar.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                BotonCancelarMouseClicked(evt);
-            }
-        });
-
         jLabel6.setText("Especialidad");
+
+        BotonCerrar.setText("Cerrar");
+        BotonCerrar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                BotonCerrarMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addGap(34, 34, 34)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(36, 36, 36)
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(TextFieldBuscarID, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(31, 31, 31)
-                        .addComponent(BotonBuscar))
+                        .addGap(65, 65, 65)
+                        .addComponent(BuscarID, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
+                        .addComponent(BotonBuscar)
+                        .addGap(36, 36, 36))
                     .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel6))
+                        .addGap(35, 35, 35)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(26, 26, 26)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                .addGap(18, 18, 18))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addContainerGap()
-                                .addComponent(jLabel6)
-                                .addGap(10, 10, 10)))
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(TextFieldEspecialidad, javax.swing.GroupLayout.DEFAULT_SIZE, 240, Short.MAX_VALUE)
-                            .addComponent(TextFieldNombre)
-                            .addComponent(TextFieldApellido)
-                            .addComponent(TextFieldEmail)
-                            .addComponent(TextFieldTelefono))))
-                .addContainerGap(44, Short.MAX_VALUE))
+                                    .addComponent(TextFieldNombre)
+                                    .addComponent(TextFieldApellido)
+                                    .addComponent(TextFieldEspecialidad, javax.swing.GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE))
+                                .addComponent(TextFieldEmail, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(TextFieldTelefono, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
             .addGroup(layout.createSequentialGroup()
-                .addGap(27, 27, 27)
-                .addComponent(BotonEliminar)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(BotonCancelar)
-                .addGap(33, 33, 33))
+                .addGap(155, 155, 155)
+                .addComponent(BotonCerrar)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(TextFieldBuscarID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(26, 26, 26)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(BuscarID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel1))
                     .addComponent(BotonBuscar))
-                .addGap(34, 34, 34)
+                .addGap(30, 30, 30)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(TextFieldNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2))
@@ -173,10 +160,8 @@ public class EvaluadorBaja extends javax.swing.JFrame {
                     .addComponent(TextFieldEspecialidad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel6))
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(BotonEliminar)
-                    .addComponent(BotonCancelar))
-                .addContainerGap(26, Short.MAX_VALUE))
+                .addComponent(BotonCerrar)
+                .addContainerGap(22, Short.MAX_VALUE))
         );
 
         pack();
@@ -189,8 +174,7 @@ public class EvaluadorBaja extends javax.swing.JFrame {
     private void BotonBuscarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BotonBuscarMouseClicked
         // TODO add your handling code here:
         try {
-            int id = Integer.parseInt(TextFieldBuscarID.getText());
-            
+            int id = Integer.parseInt(BuscarID.getText());
 
             Evaluador evaluador = evaluadorDAO.buscar(id);
             if (evaluador != null) {
@@ -219,31 +203,10 @@ public class EvaluadorBaja extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_BotonBuscarMouseClicked
 
-    private void BotonEliminarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BotonEliminarMouseClicked
-        // TODO add your handling code here:
-        try {
-            int id = Integer.parseInt(TextFieldBuscarID.getText());
-
-            int confirm = JOptionPane.showConfirmDialog(this, 
-                    "¿Seguro que desea eliminar este evaluador?", "Confirmar eliminación", JOptionPane.YES_NO_OPTION);
-
-            if (confirm == JOptionPane.YES_OPTION) {
-                relacionDAO.eliminarPorEvaluador(id);
-                evaluadorDAO.eliminar(id);
-
-                JOptionPane.showMessageDialog(this, "Evaluador eliminado correctamente");
-                dispose(); // Cierra la ventana
-
-            }
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this, "Error al eliminar: " + ex.getMessage());
-        }
-    }//GEN-LAST:event_BotonEliminarMouseClicked
-
-    private void BotonCancelarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BotonCancelarMouseClicked
+    private void BotonCerrarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BotonCerrarMouseClicked
         // TODO add your handling code here:
         dispose();
-    }//GEN-LAST:event_BotonCancelarMouseClicked
+    }//GEN-LAST:event_BotonCerrarMouseClicked
 
     /**
      * @param args the command line arguments
@@ -262,30 +225,29 @@ public class EvaluadorBaja extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(EvaluadorBaja.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(EvaluadorInfo.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(EvaluadorBaja.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(EvaluadorInfo.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(EvaluadorBaja.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(EvaluadorInfo.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(EvaluadorBaja.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(EvaluadorInfo.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new EvaluadorBaja().setVisible(true);
+                new EvaluadorInfo().setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BotonBuscar;
-    private javax.swing.JButton BotonCancelar;
-    private javax.swing.JButton BotonEliminar;
+    private javax.swing.JButton BotonCerrar;
+    private javax.swing.JTextField BuscarID;
     private javax.swing.JTextField TextFieldApellido;
-    private javax.swing.JTextField TextFieldBuscarID;
     private javax.swing.JTextField TextFieldEmail;
     private javax.swing.JTextField TextFieldEspecialidad;
     private javax.swing.JTextField TextFieldNombre;
