@@ -94,7 +94,7 @@ public class EvaluadorBaja extends javax.swing.JFrame {
             }
         });
 
-        BotonCancelar.setText("Cancelar");
+        BotonCancelar.setText("Cerrar");
         BotonCancelar.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 BotonCancelarMouseClicked(evt);

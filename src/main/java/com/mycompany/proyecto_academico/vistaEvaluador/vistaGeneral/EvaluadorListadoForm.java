@@ -4,6 +4,7 @@
  */
 package com.mycompany.proyecto_academico.vistaEvaluador.vistaGeneral;
 
+import ReportePDFJava.ReportePDF;
 import com.mycompany.proyecto_academico.DAO.EvaluadorDAO;
 import com.mycompany.proyecto_academico.DAO.EvaluadorTieneEspecialidadDAO;
 import com.mycompany.proyecto_academico.modelo.Evaluador;
@@ -12,9 +13,16 @@ import com.mycompany.proyecto_academico.vistaEvaluador.EvaluadorBaja;
 import com.mycompany.proyecto_academico.vistaEvaluador.EvaluadorForm;
 import com.mycompany.proyecto_academico.vistaEvaluador.EvaluadorInfo;
 import com.mycompany.proyecto_academico.vistaEvaluador.EvaluadorModificacion;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.List;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -53,6 +61,71 @@ public class EvaluadorListadoForm extends javax.swing.JFrame {
         }
     }
 
+    public void exportarDumpBaseDatos(String backupPath) {
+        String pgDumpPath = "\"C:\\Program Files\\PostgreSQL\\17\\bin\\pg_dump.exe\""; // Ruta completa a pg_dump
+        String host = "localhost";
+        String port = "5432";
+        String user = "postgres"; // Reemplazá si tu usuario es otro
+        String dbName = "proyecto_academico"; // Reemplazá con el nombre de tu base
+
+        String command = pgDumpPath + " -h " + host + " -p " + port + " -U " + user + " -F p -f \"" + backupPath + "\" " + dbName;
+
+        try {
+            // Variable de entorno para la contraseña
+            ProcessBuilder pb = new ProcessBuilder("cmd.exe", "/c", command);
+            pb.environment().put("PGPASSWORD", "Wakser77"); // Reemplazá con tu contraseña real
+
+            // Ejecutar el proceso
+            Process process = pb.start();
+
+            // Capturar errores
+            InputStream errorStream = process.getErrorStream();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(errorStream));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                System.err.println(line); // Podés mostrarlo en un JTextArea si querés
+            }
+
+            int exitCode = process.waitFor();
+            if (exitCode == 0) {
+                JOptionPane.showMessageDialog(null, "Base de datos exportada exitosamente.");
+            } else {
+                JOptionPane.showMessageDialog(null, "Error al exportar la base de datos. Código: " + exitCode, "Error", JOptionPane.ERROR_MESSAGE);
+            }
+
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Error al ejecutar el comando: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    public static void importarBD() {
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Seleccionar archivo de respaldo");
+        int seleccion = fileChooser.showOpenDialog(null);
+
+        if (seleccion == JFileChooser.APPROVE_OPTION) {
+            File archivo = fileChooser.getSelectedFile();
+            String ruta = archivo.getAbsolutePath();
+
+            try {
+                String comando = "pg_restore -U postgres -d proyecto_academico -f \"" + ruta + "\"";
+                ProcessBuilder pb = new ProcessBuilder("cmd.exe", "/c", comando);
+                pb.environment().put("PGPASSWORD", "Wakser77");
+
+                Process p = pb.start();
+                p.waitFor();
+
+                JOptionPane.showMessageDialog(null, "Base de datos importada correctamente.");
+            } catch (Exception e) {
+                e.printStackTrace();
+                JOptionPane.showMessageDialog(null, "Error al importar la base de datos: " + e.getMessage());
+            }
+        }
+    }
+
+
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -70,6 +143,9 @@ public class EvaluadorListadoForm extends javax.swing.JFrame {
         BotonModificacion = new javax.swing.JButton();
         BotonEliminar = new javax.swing.JButton();
         BotonBuscar = new javax.swing.JButton();
+        BotonExportarPDF = new javax.swing.JButton();
+        BotonExportarBD = new javax.swing.JButton();
+        BotonImportarBD = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -138,18 +214,36 @@ public class EvaluadorListadoForm extends javax.swing.JFrame {
             }
         });
 
+        BotonExportarPDF.setText("Reporte PDF");
+        BotonExportarPDF.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                BotonExportarPDFMouseClicked(evt);
+            }
+        });
+
+        BotonExportarBD.setText("Exportar BD");
+        BotonExportarBD.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                BotonExportarBDMouseClicked(evt);
+            }
+        });
+        BotonExportarBD.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BotonExportarBDActionPerformed(evt);
+            }
+        });
+
+        BotonImportarBD.setText("Importar BD");
+        BotonImportarBD.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                BotonImportarBDMouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(BotonCerrar, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(BotonActualizar, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(33, 33, 33))
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -165,12 +259,30 @@ public class EvaluadorListadoForm extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jScrollPane1)
                         .addContainerGap())))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(313, 313, 313)
+                .addComponent(BotonCerrar, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(BotonActualizar, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(63, 63, 63)
+                .addComponent(BotonExportarPDF, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(72, 72, 72)
+                .addComponent(BotonExportarBD, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(BotonImportarBD, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(31, 31, 31))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(BotonActualizar)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(BotonActualizar)
+                    .addComponent(BotonExportarPDF)
+                    .addComponent(BotonExportarBD)
+                    .addComponent(BotonImportarBD))
                 .addGap(16, 16, 16)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 242, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 24, Short.MAX_VALUE)
@@ -179,9 +291,9 @@ public class EvaluadorListadoForm extends javax.swing.JFrame {
                     .addComponent(BotonEliminar)
                     .addComponent(BotonModificacion)
                     .addComponent(BotonAgregar))
-                .addGap(35, 35, 35)
+                .addGap(18, 18, 18)
                 .addComponent(BotonCerrar)
-                .addContainerGap())
+                .addGap(23, 23, 23))
         );
 
         pack();
@@ -246,6 +358,50 @@ public class EvaluadorListadoForm extends javax.swing.JFrame {
         buscarForm.setVisible(true);
     }//GEN-LAST:event_BotonBuscarMouseClicked
 
+    private void BotonExportarPDFMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BotonExportarPDFMouseClicked
+        // TODO add your handling code here:
+        JFileChooser selector = new JFileChooser();
+        selector.setDialogTitle("Guardar reporte como...");
+
+        int seleccion = selector.showSaveDialog(this);
+
+        if (seleccion == JFileChooser.APPROVE_OPTION) {
+            String ruta = selector.getSelectedFile().getAbsolutePath();
+            if (!ruta.endsWith(".pdf")) {
+                ruta += ".pdf";
+            }
+
+            ReportePDF reporte = new ReportePDF();
+            List<Evaluador> evaluadores = evaluadorDAO.listarTodos();
+            reporte.generarReporteEvaluadores(evaluadores, ruta);
+
+            JOptionPane.showMessageDialog(this, "Reporte exportado exitosamente a:\n" + ruta);
+        }
+    }//GEN-LAST:event_BotonExportarPDFMouseClicked
+
+    private void BotonExportarBDMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BotonExportarBDMouseClicked
+        // TODO add your handling code here:
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Seleccionar ubicación del backup");
+        fileChooser.setSelectedFile(new File("backup.sql")); // nombre por defecto
+
+        int userSelection = fileChooser.showSaveDialog(this);
+        if (userSelection == JFileChooser.APPROVE_OPTION) {
+            File fileToSave = fileChooser.getSelectedFile();
+            exportarDumpBaseDatos(fileToSave.getAbsolutePath());
+        }
+        
+    }//GEN-LAST:event_BotonExportarBDMouseClicked
+
+    private void BotonExportarBDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonExportarBDActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_BotonExportarBDActionPerformed
+
+    private void BotonImportarBDMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BotonImportarBDMouseClicked
+        // TODO add your handling code here:
+        importarBD();
+    }//GEN-LAST:event_BotonImportarBDMouseClicked
+
     /**
      * @param args the command line arguments
      */
@@ -287,6 +443,9 @@ public class EvaluadorListadoForm extends javax.swing.JFrame {
     private javax.swing.JButton BotonBuscar;
     private javax.swing.JButton BotonCerrar;
     private javax.swing.JButton BotonEliminar;
+    private javax.swing.JButton BotonExportarBD;
+    private javax.swing.JButton BotonExportarPDF;
+    private javax.swing.JButton BotonImportarBD;
     private javax.swing.JButton BotonModificacion;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;

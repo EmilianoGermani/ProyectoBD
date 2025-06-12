@@ -88,7 +88,7 @@ private EvaluadorDAO evaluadorDAO;
             }
         });
 
-        jButton4.setText("Cancelar");
+        jButton4.setText("Cerrar");
         jButton4.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jButton4MouseClicked(evt);
@@ -194,8 +194,6 @@ private EvaluadorDAO evaluadorDAO;
             // Crear relación con especialidad
             EvaluadorTieneEspecialidadDAO relacionDAO = new EvaluadorTieneEspecialidadDAO(emf);
             relacionDAO.agregarRelacion(evaluador, especialidadSeleccionada);
-
-            javax.swing.JOptionPane.showMessageDialog(this, "Evaluador y su especialidad fueron agregados correctamente.");
             dispose(); // Opcional: cerrar ventana tras éxito
         } catch (Exception e) {
             javax.swing.JOptionPane.showMessageDialog(this, "Error al agregar evaluador: " + e.getMessage());

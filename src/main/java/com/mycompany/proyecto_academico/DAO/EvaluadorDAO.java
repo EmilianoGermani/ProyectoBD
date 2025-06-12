@@ -53,7 +53,7 @@ private static EntityManagerFactory emf = Persistence.createEntityManagerFactory
 
     public List<Evaluador> listarTodos() {
         EntityManager em = emf.createEntityManager();
-        List<Evaluador> lista = em.createQuery("SELECT e FROM Evaluador e", Evaluador.class).getResultList();
+        List<Evaluador> lista = em.createQuery("SELECT e FROM Evaluador e ORDER BY e.id_evaluador ASC", Evaluador.class).getResultList();
         em.close();
         return lista;
     }

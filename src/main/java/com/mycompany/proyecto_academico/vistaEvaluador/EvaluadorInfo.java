@@ -31,8 +31,8 @@ public class EvaluadorInfo extends javax.swing.JFrame {
         TextFieldEmail.setEditable(false);
         TextFieldTelefono.setEditable(false);
         TextFieldEspecialidad.setEditable(false);
-        emf = Persistence.createEntityManagerFactory("Persistencia"); // Usa el nombre exacto del persistence.xml
         evaluadorDAO = new EvaluadorDAO();
+        emf = Persistence.createEntityManagerFactory("Persistencia"); // Usa el nombre exacto del persistence.xml
         relacionDAO = new EvaluadorTieneEspecialidadDAO(emf);
     }
 
@@ -185,7 +185,6 @@ public class EvaluadorInfo extends javax.swing.JFrame {
                 
                 Evaluador_tiene_especialidad relacion = relacionDAO.buscarEspecialidadEvaluador(id);
                 String esp = relacion.getEspecialidad().getNombre();
-                System.out.println(esp);
                 if (esp != null ) {
                     TextFieldEspecialidad.setText(esp);
                 } else {
