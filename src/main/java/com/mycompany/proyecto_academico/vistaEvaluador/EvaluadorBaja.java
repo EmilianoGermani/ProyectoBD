@@ -4,6 +4,15 @@
  */
 package com.mycompany.proyecto_academico.vistaEvaluador;
 
+import com.mycompany.proyecto_academico.DAO.EspecialidadDAO;
+import com.mycompany.proyecto_academico.DAO.EvaluadorDAO;
+import com.mycompany.proyecto_academico.DAO.EvaluadorTieneEspecialidadDAO;
+import com.mycompany.proyecto_academico.modelo.Evaluador;
+import com.mycompany.proyecto_academico.modelo.Evaluador_tiene_especialidad;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author emi_g
@@ -13,8 +22,23 @@ public class EvaluadorBaja extends javax.swing.JFrame {
     /**
      * Creates new form EvaluadorBaja
      */
+    private EntityManagerFactory emf;
+    private EvaluadorDAO evaluadorDAO;
+    private EspecialidadDAO especialidadDAO;
+    private EvaluadorTieneEspecialidadDAO relacionDAO;
+    private Evaluador evaluadorActual;
     public EvaluadorBaja() {
         initComponents();
+        TextFieldNombre.setEditable(false);
+        TextFieldApellido.setEditable(false);
+        TextFieldEmail.setEditable(false);
+        TextFieldTelefono.setEditable(false);
+        TextFieldEspecialidad.setEditable(false);
+        emf = Persistence.createEntityManagerFactory("Persistencia"); // Usa el nombre exacto del persistence.xml
+        especialidadDAO = new EspecialidadDAO(emf);
+        evaluadorDAO = new EvaluadorDAO();
+        especialidadDAO = new EspecialidadDAO(emf);
+        relacionDAO = new EvaluadorTieneEspecialidadDAO(emf);
     }
 
     /**
@@ -168,14 +192,61 @@ public class EvaluadorBaja extends javax.swing.JFrame {
 
     private void BotonBuscarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BotonBuscarMouseClicked
         // TODO add your handling code here:
+        try {
+            int id = Integer.parseInt(TextFieldBuscarID.getText());
+            
+
+            Evaluador evaluador = evaluadorDAO.buscar(id);
+            if (evaluador != null) {
+                TextFieldNombre.setText(evaluador.getNombre());
+                TextFieldApellido.setText(evaluador.getApellido());
+                TextFieldEmail.setText(evaluador.getEmail());
+                TextFieldTelefono.setText(evaluador.getTelefono());
+                
+                Evaluador_tiene_especialidad relacion = relacionDAO.buscarEspecialidadEvaluador(id);
+                String esp = relacion.getEspecialidad().getNombre();
+                System.out.println(esp);
+                if (esp != null ) {
+                    TextFieldEspecialidad.setText(esp);
+                } else {
+                    TextFieldEspecialidad.setText("Sin asignar");
+                }
+
+            } else {
+                JOptionPane.showMessageDialog(this, "Evaluador no encontrado");
+            }
+
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this, "ID inválido");
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Error al buscar: " + ex.getMessage());
+        }
     }//GEN-LAST:event_BotonBuscarMouseClicked
 
     private void BotonEliminarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BotonEliminarMouseClicked
         // TODO add your handling code here:
+        try {
+            int id = Integer.parseInt(TextFieldBuscarID.getText());
+
+            int confirm = JOptionPane.showConfirmDialog(this, 
+                    "¿Seguro que desea eliminar este evaluador?", "Confirmar eliminación", JOptionPane.YES_NO_OPTION);
+
+            if (confirm == JOptionPane.YES_OPTION) {
+                relacionDAO.eliminarPorEvaluador(id);
+                evaluadorDAO.eliminar(id);
+
+                JOptionPane.showMessageDialog(this, "Evaluador eliminado correctamente");
+                dispose(); // Cierra la ventana
+
+            }
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Error al eliminar: " + ex.getMessage());
+        }
     }//GEN-LAST:event_BotonEliminarMouseClicked
 
     private void BotonCancelarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BotonCancelarMouseClicked
         // TODO add your handling code here:
+        dispose();
     }//GEN-LAST:event_BotonCancelarMouseClicked
 
     /**

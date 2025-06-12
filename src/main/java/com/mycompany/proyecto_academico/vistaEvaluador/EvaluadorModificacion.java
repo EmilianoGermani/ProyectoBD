@@ -32,7 +32,7 @@ public class EvaluadorModificacion extends javax.swing.JFrame {
     public EvaluadorModificacion() {
         initComponents();
         emf = Persistence.createEntityManagerFactory("Persistencia"); // Usa el nombre exacto del persistence.xml
-        especialidadDAO = new EspecialidadDAO(emf);
+        //especialidadDAO = new EspecialidadDAO(emf);
 
         evaluadorDAO = new EvaluadorDAO();
         especialidadDAO = new EspecialidadDAO(emf);

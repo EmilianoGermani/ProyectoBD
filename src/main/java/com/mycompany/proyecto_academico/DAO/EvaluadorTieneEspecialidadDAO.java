@@ -4,6 +4,7 @@ import com.mycompany.proyecto_academico.modelo.*;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import java.util.List;
+import javax.persistence.NoResultException;
 
 public class EvaluadorTieneEspecialidadDAO {
 
@@ -70,7 +71,34 @@ public class EvaluadorTieneEspecialidadDAO {
             if (em.isOpen()) em.close();
         }
     }
+    
+    public Evaluador_tiene_especialidad buscarEspecialidadEvaluador(int idEvaluador) {
+        EntityManager em = emf.createEntityManager();
+        Evaluador_tiene_especialidad resultado = null;
 
+        try {
+            resultado = em.createQuery(
+                "SELECT e FROM com.mycompany.proyecto_academico.modelo.Evaluador_tiene_especialidad e WHERE e.id.id_evaluador = :idEvaluador", 
+                Evaluador_tiene_especialidad.class)
+                .setParameter("idEvaluador", idEvaluador)
+                .setMaxResults(1) // por si hay más de una especialidad
+                .getSingleResult();
+        } catch (NoResultException ex) {
+            // No se encontró ninguna especialidad asociada al evaluador
+            resultado = null;
+        } finally {
+            em.close();
+        }
+
+        return resultado;
+    }
+    
+    public Especialidad buscarEspecialidad(int idEspecialidad) {
+        EntityManager em = emf.createEntityManager();
+        Especialidad e = em.find(Especialidad.class, idEspecialidad);
+        em.close();
+        return e;
+    }
 
 }
 
