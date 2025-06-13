@@ -9,6 +9,7 @@ import com.mycompany.proyecto_academico.modelo.Especialidad;
 import com.mycompany.proyecto_academico.modelo.Evaluador;
 import com.mycompany.proyecto_academico.modelo.Evaluador_tiene_especialidad;
 import com.mycompany.proyecto_academico.vistaEvaluador.vistaGeneral.EvaluadorListadoForm;
+import com.mycompany.proyecto_academico.vistaEvaluador.vistaGeneral.LoginFrame;
 import java.lang.module.Configuration;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -23,9 +24,26 @@ import org.hibernate.SessionFactory;
 public class Proyecto_academico {
 
     public static void main(String[] args) {
-        javax.swing.SwingUtilities.invokeLater(() -> {
-            EvaluadorListadoForm ventana = new EvaluadorListadoForm();
-            ventana.setVisible(true);
-        });
+        LoginFrame login = new LoginFrame();
+        login.setVisible(true);
+
+        // Esperamos que el login se cierre antes de continuar
+        while (login.isDisplayable()) {
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
+        if (login.isLoginExitoso()) {
+            // Aquí abris tu ventana principal porque el login fue correcto
+            EvaluadorListadoForm listado = new EvaluadorListadoForm();
+            listado.setVisible(true);
+        } else {
+            // Opcional: salir o mostrar mensaje
+            System.out.println("No se pudo iniciar sesión.");
+            System.exit(0);
+        }
     }
 }
